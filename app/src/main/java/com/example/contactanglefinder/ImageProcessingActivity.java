@@ -1,6 +1,7 @@
 package com.example.contactanglefinder;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,7 +33,8 @@ public class ImageProcessingActivity extends Activity {
         OpenCVLoader.initDebug();
 
         imgView = findViewById(R.id.imgView2);
-        imgUri = createImageUri();
+        Intent intent = getIntent();
+        imgUri = intent.getParcelableExtra("imgUri");
 
         imgView.setImageBitmap(processImage());
     }
@@ -55,10 +57,5 @@ public class ImageProcessingActivity extends Activity {
         }
 
         return bitmap;
-    }
-
-    private Uri createImageUri() {
-        File image = new File(getFilesDir(), "camera_photo.jpeg");
-        return FileProvider.getUriForFile(getApplicationContext(), "com.example.contactanglefinder.fileProvider", image);
     }
 }
