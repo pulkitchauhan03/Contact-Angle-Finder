@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         imgUri = createImageUri();
         btnChange.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 contract.launch(imgUri);
             }
         });

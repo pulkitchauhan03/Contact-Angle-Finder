@@ -1,0 +1,2 @@
+ninja: Entering directory `D:\Android Studio Files\Projects\Contact Angle Finder\openCV\.cxx\Debug\l5o1r5c6\x86_64'
+ninja: no work to do.

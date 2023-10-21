@@ -22,10 +22,9 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ImageProcessingActivity">
+        <activity android:name=".ImageProcessingActivity" />
 
-        </activity>
+        <activity android:name=".ResultsActivity" />
 
         <provider android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.contactanglefinder.fileProvider"
