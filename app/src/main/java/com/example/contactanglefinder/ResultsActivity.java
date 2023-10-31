@@ -30,7 +30,10 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ResultsActivity extends Activity {
     Uri imgUri;
@@ -191,7 +194,30 @@ public class ResultsActivity extends Activity {
         Mat hierarchy = new Mat();
         Imgproc.findContours(croppedImg, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
-        // Finding Convex hull of the contour
+        // Using ConvexHull to fit Ellipse on the drop
+//        RotatedRect box = Imgproc.fitEllipse(new MatOfPoint2f(getHullPoints(contours)));
+
+        // Using Contours to fir Ellipse on the drop
+        RotatedRect box = Imgproc.fitEllipse(new MatOfPoint2f(getCleanContours(contours)));
+
+        // Adding the Crop Offset
+        box.center.x = box.center.x + leftContact;
+        return box;
+    }
+
+    private Point[] getCleanContours(List<MatOfPoint> contours) {
+        Point[] contour = contours.get(0).toArray();
+        ArrayList<Point> cleanContour = new ArrayList<Point>();
+        for(Point p:contour) {
+            Log.d("point", p.toString());
+            if(p.y < imgSize.height-1 && p.x > 0 && p.x < rightContact-leftContact)
+                cleanContour.add(p);
+        }
+
+        return cleanContour.toArray(new Point[0]);
+    }
+
+    private Point[] getHullPoints(List<MatOfPoint> contours) {
         MatOfInt hull = new MatOfInt();
         Imgproc.convexHull(contours.get(0), hull);
 
@@ -202,12 +228,7 @@ public class ResultsActivity extends Activity {
             hullPoints[i] = contourArray[hullContourIdxList.get(i)];
         }
 
-        // Fitting the ellipse to get Ellipse Details
-        RotatedRect box = Imgproc.fitEllipse(new MatOfPoint2f(hullPoints));
-
-        // Adding the Crop Offset
-        box.center.x = box.center.x + leftContact;
-        return box;
+        return hullPoints;
     }
 
     private Mat getCroppedImage(@NonNull Mat mat) {
